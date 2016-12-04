@@ -593,7 +593,7 @@ MongoClient.connect(url, function(err, db) {
               sendDatabaseError(res,err);
             }else {
               var comment = feedItem.comments[commentIdx];
-              db.collection('users').findOne({_id:comment.author},
+              db.collection('users').findOne({_id:comment.author._id},
               function(err,user) {
                 if(err) {
                   console.log("Erro happe when fining user");
@@ -648,7 +648,7 @@ MongoClient.connect(url, function(err, db) {
               sendDatabaseError(res,err);
             }else {
               var comment = feedItem.comments[commentIdx];
-              db.collection('users').findOne({_id:comment.author},
+              db.collection('users').findOne({_id:comment.author._id},
               function(err,user) {
                 if(err) {
                   console.log("Erro happe when fining user");
@@ -669,32 +669,6 @@ MongoClient.connect(url, function(err, db) {
       // Unauthorized.
       res.status(401).end();
     }
-  });
-
-  // Reset the database.
-  app.post('/resetdb', function(req, res) {
-    console.log("Resetting database...");
-    ResetDatabase(db, function() {
-      res.send();
-    });
-  });
-
-  /**
-   * Translate JSON Schema Validation failures into error 400s.
-   */
-  app.use(function(err, req, res, next) {
-    if (err.name === 'JsonSchemaValidation') {
-      // Set a bad request http response status
-      res.status(400).end();
-    } else {
-      // It's some other sort of error; pass it to next error middleware handler
-      next(err);
-    }
-  });
-
-  // Starts the server on port 3000!
-  app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
   });
 
   /**
@@ -728,6 +702,32 @@ MongoClient.connect(url, function(err, db) {
       });
     }
   }
+  // Reset the database.
+  app.post('/resetdb', function(req, res) {
+    console.log("Resetting database...");
+    ResetDatabase(db, function() {
+      res.send();
+    });
+  });
+
+  /**
+   * Translate JSON Schema Validation failures into error 400s.
+   */
+  app.use(function(err, req, res, next) {
+    if (err.name === 'JsonSchemaValidation') {
+      // Set a bad request http response status
+      res.status(400).end();
+    } else {
+      // It's some other sort of error; pass it to next error middleware handler
+      next(err);
+    }
+  });
+
+  // Starts the server on port 3000!
+  app.listen(3000, function () {
+    console.log('Example app listening on port 3000!');
+  });
+
 
 });
 // The file ends here. Nothing should be after this.

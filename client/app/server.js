@@ -127,6 +127,7 @@ export function unlikeFeedItem(feedItemId, userId, cb) {
  */
 export function likeComment(feedItemId, commentIdx, userId, cb) {
   sendXHR('PUT', '/feeditem/' + feedItemId + '/comments/' + commentIdx + '/likelist/' + userId, undefined, (xhr) => {
+    console.log("Liking comment");
     cb(JSON.parse(xhr.responseText));
   });
 }
