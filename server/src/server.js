@@ -529,6 +529,8 @@ MongoClient.connect(url, function(err, db) {
     var feedItemId = new ObjectID(req.params.feeditemid);
     if (fromUser === author) {
       comment.likeCounter = [];
+      comment.author = new ObjectID(author);
+      console.log(comment);
         db.collection('feedItems').updateOne({_id:feedItemId},
           {
             $push:{
@@ -543,7 +545,6 @@ MongoClient.connect(url, function(err, db) {
                 sendDatabaseError(res,err);
               }else {
                 res.status(201);
-                res.set('Location', '/feeditem/' + feedItemId + "/comments/" + 0);
                 // Return a resolved version of the feed item.
                 getFeedItem(feedItemId,function(err,feedItem){
                   if(err) {
